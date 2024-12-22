@@ -30,8 +30,8 @@ prepare:
 	mkdir -p $(DSTDIR)
 
 png2asset:
-	$(PNG2ASSET) $(RESDIR)/pallettown.png -c $(GENDIR)/pallettown_map.c -map -source_tileset $(RESDIR)/tileset_0.png
-	$(PNG2ASSET) $(RESDIR)/tileset_0.png -c $(GENDIR)/tileset_0.c -tiles_only -map
+	$(PNG2ASSET) $(RESDIR)/pallettown.png -c $(GENDIR)/pallettown_map.c -map -source_tileset $(RESDIR)/tileset_0.png -noflip
+	$(PNG2ASSET) $(RESDIR)/tileset_0.png -c $(GENDIR)/tileset_0.c -tiles_only -map -noflip
 
 compile.bat: Makefile
 	@echo "REM Automatically generated from Makefile" > compile.bat
