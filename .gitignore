@@ -1,0 +1,15 @@
+.DS_Store
+
+.o
+.lst
+.map
+.gb
+.gbc
+.ihx
+.sym
+.cdb
+.adb
+.asm
+
+build/
+gen/
