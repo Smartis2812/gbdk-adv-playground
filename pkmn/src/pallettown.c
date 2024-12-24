@@ -11,4 +11,5 @@ void ShowPalletTown()
     set_bkg_tiles(0, 0, pallettown_map_WIDTH >> 3, pallettown_map_HEIGHT >> 3, pallettown_map_map);
 
     // ToDo: Load in Chunks beacuse of the 256x256 tile limit
+    // Workaround for now is to use a smaller map
 }
