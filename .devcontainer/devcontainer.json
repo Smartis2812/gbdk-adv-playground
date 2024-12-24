@@ -1,0 +1,11 @@
+{
+  "name": "GBDK-2020",
+  "image": "mcr.microsoft.com/vscode/devcontainers/cpp",
+  "postCreateCommand": "cd $HOME && curl -L https://github.com/gbdk-2020/gbdk-2020/releases/download/4.3.0/gbdk-linux64.tar.gz | tar xvz && echo 'export GBDKDIR=$HOME/gbdk/' >> ~/.bashrc",
+  "remoteEnv": {
+    "GBDKDIR": "${localWorkspaceFolder}/gbdk-2020"
+  },
+  "features": {
+    "ghcr.io/jungaretti/features/make:1": {}
+  }
+}
