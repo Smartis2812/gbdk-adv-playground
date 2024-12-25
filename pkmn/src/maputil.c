@@ -22,6 +22,37 @@ uint8_t redraw;
 
 uint16_t camera_max_x, camera_max_y;
 
+
+inline uint8_t update_column_left(uint8_t map_pos_x)
+{
+#if (DEVICE_SCREEN_BUFFER_WIDTH == DEVICE_SCREEN_WIDTH)
+    return map_pos_x + 1;
+#else
+    return map_pos_x;
+#endif
+}
+
+inline uint8_t update_column_right(uint8_t map_pos_x)
+{
+    return map_pos_x + DEVICE_SCREEN_WIDTH;
+}
+
+inline uint8_t update_row_top(uint8_t map_pos_y)
+{
+#if (DEVICE_SCREEN_BUFFER_HEIGHT == DEVICE_SCREEN_HEIGHT)
+    return map_pos_y + 1;
+#else
+    return map_pos_y;
+#endif
+}
+
+inline uint8_t update_row_bottom(uint8_t map_pos_y)
+{
+    return map_pos_y + DEVICE_SCREEN_HEIGHT;
+}
+
+
+
 /** Sets up the Camera */
 void InitCamera(uint8_t x, uint8_t y, uint8_t mapIndex) {
   if (mapIndex == PALLET_TOWN_MAP_ID) {
@@ -57,18 +88,112 @@ void InitCamera(uint8_t x, uint8_t y, uint8_t mapIndex) {
     // Draw the initial map view for the whole screen
     set_submap_indices(
         map_pos_x, map_pos_y,
-        MIN(DEVICE_SCREEN_WIDTH + 1u, pallettown_map_mapWidth - map_pos_x),
-        MIN(DEVICE_SCREEN_HEIGHT + 1u, pallettown_map_mapHeight - map_pos_y),
+        MIN(DEVICE_SCREEN_WIDTH + 2u, pallettown_map_mapWidth - map_pos_x),
+        MIN(DEVICE_SCREEN_HEIGHT + 2u, pallettown_map_mapHeight - map_pos_y),
         pallettown_map_map, pallettown_map_mapWidth);
 
     set_submap_attributes(
         map_pos_x, map_pos_y,
-        MIN(DEVICE_SCREEN_WIDTH + 1u, pallettown_map_mapWidth - map_pos_x),
-        MIN(DEVICE_SCREEN_HEIGHT + 1u, pallettown_map_mapHeight - map_pos_y),
+        MIN(DEVICE_SCREEN_WIDTH + 2u, pallettown_map_mapWidth - map_pos_x),
+        MIN(DEVICE_SCREEN_HEIGHT + 2u, pallettown_map_mapHeight - map_pos_y),
         pallettown_map_map_attributes, pallettown_map_mapWidth);
   }
 
   redraw = FALSE;
 
   move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+}
+
+// void SetCamera(uint8_t x, uint8_t y){
+void SetCamera(){
+// update hardware scroll position
+    move_bkg(camera_x, WRAP_SCROLL_Y(camera_y + SCROLL_Y_OFFSET));
+    // up or down
+    map_pos_y = (uint8_t)(camera_y >> 3u);
+    if (map_pos_y != old_map_pos_y)
+    { 
+        if (camera_y < old_camera_y)
+        {
+            set_submap_indices(
+                map_pos_x,
+                update_row_top(map_pos_y),
+                MIN(DEVICE_SCREEN_WIDTH + 2, pallettown_map_mapWidth-map_pos_x),
+                2,
+                pallettown_map_map,
+                pallettown_map_mapWidth);
+            set_submap_attributes(
+                map_pos_x,
+                update_row_top(map_pos_y),
+                MIN(DEVICE_SCREEN_WIDTH + 2, pallettown_map_mapWidth-map_pos_x),
+                2,
+                pallettown_map_map_attributes,
+                pallettown_map_mapWidth);
+        }
+        else
+        {
+            if ((pallettown_map_mapHeight - DEVICE_SCREEN_HEIGHT) > map_pos_y)
+            {
+                set_submap_indices(
+                    map_pos_x,
+                    update_row_bottom(map_pos_y),
+                    MIN(DEVICE_SCREEN_WIDTH + 2, pallettown_map_mapWidth-map_pos_x),
+                    2,
+                    pallettown_map_map,
+                    pallettown_map_mapWidth);
+                set_submap_attributes(
+                    map_pos_x,
+                    update_row_bottom(map_pos_y),
+                    MIN(DEVICE_SCREEN_WIDTH + 2, pallettown_map_mapWidth-map_pos_x),
+                    2,
+                    pallettown_map_map_attributes,
+                    pallettown_map_mapWidth);
+            }
+        }
+        old_map_pos_y = map_pos_y; 
+    }
+    // left or right
+    map_pos_x = (uint8_t)(camera_x >> 3u);
+    if (map_pos_x != old_map_pos_x)
+    {
+        if (camera_x < old_camera_x)
+        {
+            set_submap_indices(
+                update_column_left(map_pos_x),
+                map_pos_y,
+                2,
+                MIN(DEVICE_SCREEN_HEIGHT + 2, pallettown_map_mapHeight - map_pos_y),
+                pallettown_map_map,
+                pallettown_map_mapWidth);
+            set_submap_attributes(
+                update_column_left(map_pos_x),
+                map_pos_y,
+                2,
+                MIN(DEVICE_SCREEN_HEIGHT + 2, pallettown_map_mapHeight - map_pos_y),
+                pallettown_map_map_attributes,
+                pallettown_map_mapWidth);
+        }
+        else
+        {
+            if ((pallettown_map_mapWidth - DEVICE_SCREEN_WIDTH) > map_pos_x)
+            {
+                set_submap_indices(
+                    update_column_right(map_pos_x),
+                    map_pos_y,
+                    2,
+                    MIN(DEVICE_SCREEN_HEIGHT + 2, pallettown_map_mapHeight - map_pos_y),
+                    pallettown_map_map,
+                    pallettown_map_mapWidth);
+                set_submap_attributes(
+                    update_column_right(map_pos_x),
+                    map_pos_y,
+                    2,
+                    MIN(DEVICE_SCREEN_HEIGHT + 2, pallettown_map_mapHeight - map_pos_y),
+                    pallettown_map_map_attributes,
+                    pallettown_map_mapWidth);
+            }
+        }
+        old_map_pos_x = map_pos_x;
+    }
+    // set old camera position to current camera position
+    old_camera_x = camera_x, old_camera_y = camera_y;
 }
