@@ -2,7 +2,8 @@
 #define CHARACTER_H
 #endif
 
-void SetupCharacter();
-void UpdateCharacter();
 
-void UpdateCamera(void);
+void SetupCharacter(void);
+void UpdateCharacter(void);
+
+//void UpdateCamera(void);

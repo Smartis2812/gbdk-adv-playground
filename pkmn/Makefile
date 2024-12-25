@@ -30,7 +30,7 @@ prepare:
 	mkdir -p $(DSTDIR)
 
 png2asset:
-	$(PNG2ASSET) $(RESDIR)/pallettown_256.png -c $(GENDIR)/pallettown_map.c -map -source_tileset $(RESDIR)/tileset_0.png -noflip
+	$(PNG2ASSET) $(RESDIR)/pallettown.png -c $(GENDIR)/pallettown_map.c -map -source_tileset $(RESDIR)/tileset_0.png -noflip
 	$(PNG2ASSET) $(RESDIR)/tileset_0.png -c $(GENDIR)/tileset_0.c -tiles_only -map -noflip
 	$(PNG2ASSET) $(RESDIR)/character_pkmnstadium.png -c $(GENDIR)/character_pkmnstadium.c -sw 32 -sh 32 -noflip
 

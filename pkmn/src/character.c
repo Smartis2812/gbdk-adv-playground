@@ -5,8 +5,6 @@
 #include "../gen/pallettown_map.h"
 
 #define MOVING_PIXELS 16
-#define CAMERA_WIDTH 160
-#define CAMERA_HEIGHT 144
 
 const metasprite_t TrainerStadium_metasprite_down[] = {
     {.dy = -8, .dx = -8, .dtile = 0, .props = 0},
@@ -64,8 +62,6 @@ const metasprite_t TrainerStadium_metasprite_right_moving[] = {
     {.dy = 0, .dx = 8, .dtile = 31, .props = 0},
     METASPR_TERM};
 
-uint16_t camera_x = 0;
-uint16_t camera_y = 0;
 // 80x96 starting position
 uint8_t sprite_x = 80;
 uint8_t sprite_y = 96;
@@ -73,7 +69,7 @@ uint8_t is_moving = 0;
 uint8_t move_steps = 0;
 const metasprite_t *current_metasprite = TrainerStadium_metasprite_down;
 
-void SetupCharacter() {
+void SetupCharacter(void) {
   SHOW_SPRITES;
   set_sprite_data(0, 32, character_pkmnstadium_tiles);
   set_sprite_tile(0, 0);
@@ -81,31 +77,7 @@ void SetupCharacter() {
   move_metasprite_ex(current_metasprite, 0, 0, 0, sprite_x, sprite_y);
 }
 
-void UpdateCamera(int16_t new_x, int16_t new_y) {
-  // Ensure the camera does not move out of bounds
-  if (new_x < 0) {
-    camera_x = 0;
-  } else if (new_x > pallettown_map_WIDTH - CAMERA_WIDTH) {
-    camera_x = pallettown_map_WIDTH - CAMERA_WIDTH;
-  } else {
-    camera_x = new_x;
-  }
-
-  if (new_y < 0) {
-    camera_y = 0;
-  } else if (new_y > pallettown_map_HEIGHT - CAMERA_HEIGHT) {
-    camera_y = pallettown_map_HEIGHT - CAMERA_HEIGHT;
-  } else {
-    camera_y = new_y;
-  }
-
-  move_bkg(camera_x, camera_y);
-}
-
-void UpdateCharacter() {
-  // Update the camera position
-  UpdateCamera(sprite_x, sprite_y);
-
+void UpdateCharacter(void) {
   if (!is_moving) {
     uint8_t joypad_state = joypad();
 
@@ -145,7 +117,6 @@ void UpdateCharacter() {
     } else {
       is_moving = 0;  // Movement is done
 
-      // Set the standing metasprite after movement is done
       if (current_metasprite == TrainerStadium_metasprite_left_moving)
         current_metasprite = TrainerStadium_metasprite_left;
       else if (current_metasprite == TrainerStadium_metasprite_right_moving)
@@ -155,8 +126,8 @@ void UpdateCharacter() {
       else if (current_metasprite == TrainerStadium_metasprite_down_moving)
         current_metasprite = TrainerStadium_metasprite_down;
 
-      // Update the sprite to the standing metasprite
       move_metasprite_ex(current_metasprite, 0, 0, 0, sprite_x, sprite_y);
+      //UpdateCamera(sprite_x, sprite_y);
     }
 
     // wait_vbl_done();

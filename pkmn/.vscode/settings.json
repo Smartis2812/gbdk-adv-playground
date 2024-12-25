@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "character_pkmnstadium.h": "c",
+        "mapcontroller.h": "c",
+        "pallettown_map.h": "c",
+        "common.h": "c"
+    }
+}
