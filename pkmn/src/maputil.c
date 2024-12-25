@@ -59,8 +59,10 @@ void InitCamera(uint8_t x, uint8_t y, uint8_t mapIndex) {
     // Set up tile data
     // set_native_tile_data(0, bigmap_TILE_COUNT, bigmap_tiles);
     set_native_tile_data(0, tileset_0_TILE_COUNT, tileset_0_tiles);
-    camera_max_y = ((pallettown_map_HEIGHT - DEVICE_SCREEN_HEIGHT) * 8) ;
-    camera_max_x = ((pallettown_map_WIDTH - DEVICE_SCREEN_WIDTH) * 8) ;
+    // camera_max_y = ((pallettown_map_HEIGHT - DEVICE_SCREEN_HEIGHT) * 8) ;
+    camera_max_y = ((pallettown_map_HEIGHT - DEVICE_SCREEN_HEIGHT) - 128) ;
+    // camera_max_x = ((pallettown_map_WIDTH - DEVICE_SCREEN_WIDTH) * 8) ;
+    camera_max_x = ((pallettown_map_WIDTH - DEVICE_SCREEN_WIDTH) - 152) ;
   }
 
   /*
@@ -88,7 +90,7 @@ void InitCamera(uint8_t x, uint8_t y, uint8_t mapIndex) {
     // Draw the initial map view for the whole screen
     set_submap_indices(
         map_pos_x, map_pos_y,
-        MIN(DEVICE_SCREEN_WIDTH + 2u, pallettown_map_mapWidth - map_pos_x),
+        MIN(DEVICE_SCREEN_WIDTH + 2u, pallettown_map_mapWidth - map_pos_x) + 16,
         MIN(DEVICE_SCREEN_HEIGHT + 2u, pallettown_map_mapHeight - map_pos_y),
         pallettown_map_map, pallettown_map_mapWidth);
 
