@@ -38,6 +38,13 @@ const metasprite_t Player_metasprite[] = {
     {.dy = 0, .dx = 8, .dtile = 3, .props = 0},
     METASPR_TERM};
 
+const metasprite_t PlayerMove_metasprite[] = {
+    {.dy = -8, .dx = -8, .dtile = 4, .props = 0},
+    {.dy = 0, .dx = 8, .dtile = 6, .props = 0},
+    {.dy = 8, .dx = -8, .dtile = 5, .props = 0},
+    {.dy = 0, .dx = 8, .dtile = 7, .props = 0},
+    METASPR_TERM};
+
 const metasprite_t Exitsign_metasprite[] = {
     {.dy = -8, .dx = -8, .dtile = 0, .props = 0},
     {.dy = 0, .dx = 8, .dtile = 2, .props = 0},
@@ -69,6 +76,34 @@ void DrawGameMap(void) {
   }
 }
 
+BOOLEAN CanPlayerMove(uint8_t x, uint8_t y) {
+  if (x < 0 || x >= GAMEMAP_WIDTH || y < 0 || y >= GAMEMAP_HEIGHT) {
+    return FALSE;
+  }
+  if (GameMap[x][y] & WALL_BIT) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+// Update the player position on the GameMap visually
+
+void UpdatePlayerPosition(BOOLEAN isMoving) {
+  if (isMoving) {
+    move_metasprite_ex(PlayerMove_metasprite, 0, 0, 0,
+                       GAMEMAP_OFFSET + (SPRITE_SIZE * (PlayerX + 1)),
+                       GAMEMAP_OFFSET * 2 + (SPRITE_SIZE * (PlayerY + 1)));
+    wait_vbl_done(); // HACK
+    wait_vbl_done();
+    wait_vbl_done();
+    wait_vbl_done();
+  } else {
+    move_metasprite_ex(Player_metasprite, 0, 0, 0,
+                       GAMEMAP_OFFSET + (SPRITE_SIZE * (PlayerX + 1)),
+                       GAMEMAP_OFFSET * 2 + (SPRITE_SIZE * (PlayerY + 1)));
+  }
+}
+
 void main(void) {
   DISPLAY_ON;
   SHOW_BKG;
@@ -92,17 +127,18 @@ void main(void) {
   set_bkg_tiles(0, 0, 20, 18, background_map);
 
   // Load Player sprite
-  set_sprite_data(0, player_sprite_TILE_COUNT, player_sprite_tiles);
-  move_metasprite_ex(Player_metasprite, 0, 0, 0,
-                     GAMEMAP_OFFSET + (SPRITE_SIZE * (PlayerX + 1)),
-                     GAMEMAP_OFFSET * 2 + (SPRITE_SIZE * (PlayerY + 1)));
+  set_sprite_data(0, 12, player_sprite_tiles);
+  UpdatePlayerPosition(FALSE);
 
   // Load Exit-sign sprite
-  set_sprite_data(player_sprite_TILE_COUNT, exit_sign_TILE_COUNT, exit_sign_tiles);
+  set_sprite_data(player_sprite_TILE_COUNT, exit_sign_TILE_COUNT,
+                  exit_sign_tiles);
   move_metasprite_ex(Exitsign_metasprite, player_sprite_TILE_COUNT, 0, 4,
                      GAMEMAP_OFFSET + SPRITE_SIZE * 8,
                      GAMEMAP_OFFSET * 2 + SPRITE_SIZE);
   SHOW_SPRITES;
+
+  BOOLEAN playerMove = FALSE;
 
   // Game loop
   while (TRUE) {
@@ -113,15 +149,32 @@ void main(void) {
 
     // Move Player
     joy = joypad();
-    if (joy & J_LEFT) {
-      // Move player left
-    } else if (joy & J_RIGHT) {
-      // Move player right
-    } else if (joy & J_UP) {
-      // Move player up
-    } else if (joy & J_DOWN) {
-      // Move player down
+    if (!playerMove) {
+      if (joy & J_LEFT) {
+        if (CanPlayerMove(PlayerX - 1, PlayerY)) {
+          PlayerX--;
+          playerMove = TRUE;
+        }
+      } else if (joy & J_RIGHT) {
+        if (CanPlayerMove(PlayerX + 1, PlayerY)) {
+          PlayerX++;
+          playerMove = TRUE;
+        }
+      } else if (joy & J_UP) {
+        if (CanPlayerMove(PlayerX, PlayerY - 1)) {
+          PlayerY--;
+          playerMove = TRUE;
+        }
+      } else if (joy & J_DOWN) {
+        if (CanPlayerMove(PlayerX, PlayerY + 1)) {
+          PlayerY++;
+          playerMove = TRUE;
+        }
+      }
     }
+
+    UpdatePlayerPosition(playerMove);
+    playerMove = FALSE;
 
     if (joy) {
       // Every step costs 1 health
