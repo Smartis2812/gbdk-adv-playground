@@ -20,10 +20,6 @@
 #define WALL_BIT 0x64       // 0100 0000
 #define EXIT_BIT 0x128      // 1000 0000
 
-// Clear player bit from current position
-// gameMap[playerY][playerX] &= ~PLAYER_BIT;
-// Set player bit in new position
-// gameMap[newY][newX] |= PLAYER_BIT;
 
 UBYTE GameMap[GAMEMAP_WIDTH][GAMEMAP_HEIGHT] = {
     {0, 0, 0, 0, 0, 0, 0, 8}, {0, 0, 0, 0, 0, 0, 0, 0},
@@ -152,22 +148,30 @@ void main(void) {
     if (!playerMove) {
       if (joy & J_LEFT) {
         if (CanPlayerMove(PlayerX - 1, PlayerY)) {
+          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
           PlayerX--;
+          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
           playerMove = TRUE;
         }
       } else if (joy & J_RIGHT) {
         if (CanPlayerMove(PlayerX + 1, PlayerY)) {
+          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
           PlayerX++;
+          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
           playerMove = TRUE;
         }
       } else if (joy & J_UP) {
         if (CanPlayerMove(PlayerX, PlayerY - 1)) {
+          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
           PlayerY--;
+          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
           playerMove = TRUE;
         }
       } else if (joy & J_DOWN) {
         if (CanPlayerMove(PlayerX, PlayerY + 1)) {
+          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
           PlayerY++;
+          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
           playerMove = TRUE;
         }
       }
