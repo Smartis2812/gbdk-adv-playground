@@ -5,6 +5,7 @@
 #include "../gen/exit_sign.h"
 #include "../gen/player_sprite.h"
 #include "../gen/title.h"
+#include "mathf.h"
 
 #define GAMEMAP_OFFSET 8
 #define GAMEMAP_WIDTH 8
@@ -19,7 +20,6 @@
 #define BREAKABLE_BIT 0x20  // 0010 0000
 #define WALL_BIT 0x64       // 0100 0000
 #define EXIT_BIT 0x128      // 1000 0000
-
 
 UBYTE GameMap[GAMEMAP_WIDTH][GAMEMAP_HEIGHT] = {
     {0, 0, 0, 0, 0, 0, 0, 8}, {0, 0, 0, 0, 0, 0, 0, 0},
@@ -89,7 +89,7 @@ void UpdatePlayerPosition(BOOLEAN isMoving) {
     move_metasprite_ex(PlayerMove_metasprite, 0, 0, 0,
                        GAMEMAP_OFFSET + (SPRITE_SIZE * (PlayerX + 1)),
                        GAMEMAP_OFFSET * 2 + (SPRITE_SIZE * (PlayerY + 1)));
-    wait_vbl_done(); // HACK
+    wait_vbl_done();  // HACK
     wait_vbl_done();
     wait_vbl_done();
     wait_vbl_done();
@@ -130,6 +130,8 @@ void main(void) {
   set_sprite_data(player_sprite_TILE_COUNT, exit_sign_TILE_COUNT,
                   exit_sign_tiles);
   move_metasprite_ex(Exitsign_metasprite, player_sprite_TILE_COUNT, 0, 4,
+                     //  GAMEMAP_OFFSET + SPRITE_SIZE * GetRandom(1, 8),
+                     //  GAMEMAP_OFFSET * 2 + SPRITE_SIZE * GetRandom(1, 8));
                      GAMEMAP_OFFSET + SPRITE_SIZE * 8,
                      GAMEMAP_OFFSET * 2 + SPRITE_SIZE);
   SHOW_SPRITES;
