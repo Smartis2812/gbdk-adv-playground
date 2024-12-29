@@ -42,7 +42,7 @@ uint8_t PlayerY = 7;
 uint8_t joy;
 UWORD seed;
 
-BOOLEAN CanPlayerMove(uint8_t x, uint8_t y) {
+BOOLEAN CanPlayerMove(int8_t x, int8_t y) {
   if (x < 0 || x >= GAMEMAP_WIDTH || y < 0 || y >= GAMEMAP_HEIGHT) {
     return FALSE;
   }
@@ -68,6 +68,12 @@ void UpdatePlayerPosition(BOOLEAN isMoving) {
                        GAMEMAP_OFFSET + (SPRITE_SIZE * (PlayerX + 1)),
                        GAMEMAP_OFFSET * 2 + (SPRITE_SIZE * (PlayerY + 1)));
   }
+}
+
+void PrintGameplayStats(void) {
+  // Print Player Health
+  // Print Player Ammo
+  // Print Level
 }
 
 void main(void) {

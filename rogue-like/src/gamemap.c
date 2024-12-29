@@ -32,7 +32,7 @@ void DrawGameMap(void) {
 }
 
 // Gets the tile data at the given x and y position from the GameMap
-UBYTE GetTileData(uint8_t x, uint8_t y) {
+UBYTE GetTileData(int8_t x, int8_t y) {
   if (x < 0 || x >= GAMEMAP_WIDTH || y < 0 || y >= GAMEMAP_HEIGHT) {
     return 0;
   }

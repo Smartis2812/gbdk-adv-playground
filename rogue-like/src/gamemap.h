@@ -18,7 +18,7 @@
 #define EXIT_BIT 0x128      // 1000 0000
 
 void DrawGameMap(void);
-UBYTE GetTileData(uint8_t x, uint8_t y);
+UBYTE GetTileData(int8_t x, int8_t y);
 void RemoveBitFromTile(uint8_t x, uint8_t y, UBYTE bit);
 void SetBitOnTile(uint8_t x, uint8_t y, UBYTE bit);
 
