@@ -33,6 +33,7 @@ png2asset:
 	$(PNG2ASSET) $(RESDIR)/title.png -c $(GENDIR)/title.c -noflip -map
 	$(PNG2ASSET) $(RESDIR)/background.png -c $(GENDIR)/background.c -noflip -map
 	$(PNG2ASSET) $(RESDIR)/player_sprite.png -c $(GENDIR)/player_sprite.c -sw 32 -sh 32 -noflip
+	$(PNG2ASSET) $(RESDIR)/robot_sprite.png -c $(GENDIR)/robot_sprite.c -sw 32 -sh 32 -noflip
 	$(PNG2ASSET) $(RESDIR)/exit-sign.png -c $(GENDIR)/exit_sign.c -sw 32 -sh 32 -noflip
 
 compile.bat: Makefile

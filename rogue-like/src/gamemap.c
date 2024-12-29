@@ -31,6 +31,13 @@ void DrawGameMap(void) {
   }
 }
 
+BOOLEAN IsFreeTile(int8_t x, int8_t y) {
+  if (GameMap[y][x] == 0) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
 // Gets the tile data at the given x and y position from the GameMap
 UBYTE GetTileData(int8_t x, int8_t y) {
   if (x < 0 || x >= GAMEMAP_WIDTH || y < 0 || y >= GAMEMAP_HEIGHT) {
@@ -40,7 +47,11 @@ UBYTE GetTileData(int8_t x, int8_t y) {
 }
 
 void RemoveBitFromTile(uint8_t x, uint8_t y, UBYTE bit) {
-  GameMap[y][x] &= ~bit;
+  // GameMap[y][x] &= ~bit;
+  GameMap[y][x] = 0;
 }
 
-void SetBitOnTile(uint8_t x, uint8_t y, UBYTE bit) { GameMap[y][x] |= bit; }
+void SetBitOnTile(uint8_t x, uint8_t y, UBYTE bit) {
+  // GameMap[y][x] |= bit;
+  GameMap[y][x] == bit;
+}
