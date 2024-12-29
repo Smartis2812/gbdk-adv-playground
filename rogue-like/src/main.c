@@ -57,6 +57,7 @@ uint8_t PlayerX = 0;
 uint8_t PlayerY = 7;
 
 uint8_t joy;
+UWORD seed;
 
 // Draws the sprites on the GameMap
 void DrawGameMap(void) {
@@ -130,11 +131,13 @@ void main(void) {
   set_sprite_data(player_sprite_TILE_COUNT, exit_sign_TILE_COUNT,
                   exit_sign_tiles);
   move_metasprite_ex(Exitsign_metasprite, player_sprite_TILE_COUNT, 0, 4,
-                     //  GAMEMAP_OFFSET + SPRITE_SIZE * GetRandom(1, 8),
-                     //  GAMEMAP_OFFSET * 2 + SPRITE_SIZE * GetRandom(1, 8));
-                     GAMEMAP_OFFSET + SPRITE_SIZE * 8,
-                     GAMEMAP_OFFSET * 2 + SPRITE_SIZE);
+                      GAMEMAP_OFFSET + SPRITE_SIZE * GetRandom(1, 8, &seed),
+                      GAMEMAP_OFFSET * 2 + SPRITE_SIZE * GetRandom(1, 8, &seed));
+                    //  GAMEMAP_OFFSET + SPRITE_SIZE * 8,
+                    //  GAMEMAP_OFFSET * 2 + SPRITE_SIZE);
   SHOW_SPRITES;
+
+
 
   BOOLEAN playerMove = FALSE;
 

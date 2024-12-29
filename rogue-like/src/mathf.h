@@ -3,6 +3,6 @@
 
 #include <gb/gb.h>
 
-uint8_t GetRandom(uint8_t min, uint8_t max);
+uint8_t GetRandom(uint8_t min, uint8_t max, UWORD *seed);
 
 #endif
