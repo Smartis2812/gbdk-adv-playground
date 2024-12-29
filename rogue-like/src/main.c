@@ -1,31 +1,14 @@
 #include <gb/gb.h>
 #include <gb/metasprites.h>
 
+#include "mathf.h"
+#include "gamemap.h"
+
 #include "../gen/background.h"
 #include "../gen/exit_sign.h"
 #include "../gen/player_sprite.h"
 #include "../gen/title.h"
-#include "mathf.h"
 
-#define GAMEMAP_OFFSET 8
-#define GAMEMAP_WIDTH 8
-#define GAMEMAP_HEIGHT 8
-#define SPRITE_SIZE 16
-
-#define PLAYER_BIT 0x01     // 0000 0001
-#define ENEMY_BIT 0x02      // 0000 0010
-#define ENEMY2_BIT 0x04     // 0000 0100
-#define AMMO_BIT 0x08       // 0000 1000
-#define HEALTH_BIT 0x10     // 0001 0000
-#define BREAKABLE_BIT 0x20  // 0010 0000
-#define WALL_BIT 0x64       // 0100 0000
-#define EXIT_BIT 0x128      // 1000 0000
-
-UBYTE GameMap[GAMEMAP_WIDTH][GAMEMAP_HEIGHT] = {
-    {0, 0, 0, 0, 0, 0, 0, 8}, {0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0}, {1, 0, 0, 0, 0, 0, 0, 0}};
 
 const metasprite_t Player_metasprite[] = {
     {.dy = -8, .dx = -8, .dtile = 0, .props = 0},
@@ -59,25 +42,11 @@ uint8_t PlayerY = 7;
 uint8_t joy;
 UWORD seed;
 
-// Draws the sprites on the GameMap
-void DrawGameMap(void) {
-  uint8_t x, y;
-  UBYTE tile;
-
-  for (y = 0; y < GAMEMAP_HEIGHT; y++) {
-    for (x = 0; x < GAMEMAP_WIDTH; x++) {
-      tile = GameMap[x][y];
-      set_sprite_tile(x + y * GAMEMAP_WIDTH, tile);
-      move_sprite(x + y * GAMEMAP_WIDTH, x * SPRITE_SIZE, y * SPRITE_SIZE);
-    }
-  }
-}
-
 BOOLEAN CanPlayerMove(uint8_t x, uint8_t y) {
   if (x < 0 || x >= GAMEMAP_WIDTH || y < 0 || y >= GAMEMAP_HEIGHT) {
     return FALSE;
   }
-  if (GameMap[x][y] & WALL_BIT) {
+  if (GetTileData(x, y) & WALL_BIT) {
     return FALSE;
   }
   return TRUE;
@@ -153,30 +122,30 @@ void main(void) {
     if (!playerMove) {
       if (joy & J_LEFT) {
         if (CanPlayerMove(PlayerX - 1, PlayerY)) {
-          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
+          RemoveBitFromTile(PlayerX, PlayerY, PLAYER_BIT);
           PlayerX--;
-          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
+          SetBitOnTile(PlayerX, PlayerY, PLAYER_BIT);
           playerMove = TRUE;
         }
       } else if (joy & J_RIGHT) {
         if (CanPlayerMove(PlayerX + 1, PlayerY)) {
-          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
+          RemoveBitFromTile(PlayerX, PlayerY, PLAYER_BIT);
           PlayerX++;
-          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
+          SetBitOnTile(PlayerX, PlayerY, PLAYER_BIT);
           playerMove = TRUE;
         }
       } else if (joy & J_UP) {
         if (CanPlayerMove(PlayerX, PlayerY - 1)) {
-          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
+          RemoveBitFromTile(PlayerX, PlayerY, PLAYER_BIT);
           PlayerY--;
-          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
+          SetBitOnTile(PlayerX, PlayerY, PLAYER_BIT);
           playerMove = TRUE;
         }
       } else if (joy & J_DOWN) {
         if (CanPlayerMove(PlayerX, PlayerY + 1)) {
-          GameMap[PlayerY][PlayerX] &= ~PLAYER_BIT;
+          RemoveBitFromTile(PlayerX, PlayerY, PLAYER_BIT);
           PlayerY++;
-          GameMap[PlayerY][PlayerX] |= PLAYER_BIT;
+          SetBitOnTile(PlayerX, PlayerY, PLAYER_BIT);
           playerMove = TRUE;
         }
       }
