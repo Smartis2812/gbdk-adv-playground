@@ -34,6 +34,7 @@ typedef struct Note {
 } Note;
 
 extern Note SongA[14];
+extern Note SongB[24];
 
 
 void playNote(uint16_t frequency, uint16_t duration);

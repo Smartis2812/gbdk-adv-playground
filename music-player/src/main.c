@@ -9,8 +9,8 @@ void main(void) {
 
   while (1) {
     // Play each note in the SongA
-    for (uint8_t i = 0; i < sizeof(SongA) / sizeof(SongA[0]); i++) {
-      playNote(SongA[i].frequency, SongA[i].duration);
+    for (uint8_t i = 0; i < sizeof(SongB) / sizeof(SongB[0]); i++) {
+      playNote(SongB[i].frequency, SongB[i].duration);
     }
 
     vsync();
