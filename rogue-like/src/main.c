@@ -9,6 +9,9 @@
 #include "gamemap.h"
 #include "mathf.h"
 
+// TODO: Fix GameMap positions (offsets, pixels and tiles)
+// TODO: Implement a dedicated Vec2 struct for positions
+
 const metasprite_t Player_metasprite[] = {
     {.dy = -8, .dx = -8, .dtile = 0, .props = 0},
     {.dy = 0, .dx = 8, .dtile = 2, .props = 0},

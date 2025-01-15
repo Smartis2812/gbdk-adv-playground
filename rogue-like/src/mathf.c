@@ -1,6 +1,7 @@
 #include <gb/gb.h>
 #include <rand.h>
 
+// TODO: Fix signed and unsigned int values in headers
 
 uint8_t GetRandom(uint8_t min, uint8_t max, UWORD *seed) {
   *seed = DIV_REG;
